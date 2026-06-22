@@ -51,34 +51,21 @@
           "type": "insection",
           "radius": 20,
           "children": [
-            { "type": "text", "title": "Sky Scripts", "titleSize": 30, "body": "Mint Hub © Sky Project | 様々なゲームで使用することができます。" },
-            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/mint-hub-universal.lua\"))()"},
-            { "type": "button", "title": "ソースコードを見る", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/mint-hub-universal.lua"}}
+            { "type": "text", "title": "Mint Hub | Universal", "titleSize": 30, "body": "Mint Hub © Sky Project | 様々なゲームで使用することができます。" },
+            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/bloody-v2-premium.lua\"))()"},
+            { "type": "button", "title": "ソースコードを見る", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/bloody-v2-premium.lua"}}
           ]
         },
         {
           "type": "insection",
           "radius": 20,
           "children": [
-            { "type": "text", "title": "Sky Games", "titleSize": 30, "body": "すべてのゲームを無料でダウンロード、プレイができます。" },
+            { "type": "text", "title": "Bloody V2 Premium Crack", "titleSize": 30, "body": "すべてのゲームを無料でダウンロード、プレイができます。" },
             { "type": "button", "title": "サイトへ行く", "color": "primary", "action": {"type": "link", "url": "https://sky-project-web.vercel.app/product/sky-games/index.html"}}
 
           ]
-        },
-        {
-          "type": "insection",
-          "radius": 20,
-          "children": [
-            { "type": "text", "title": "ComingSoon", "titleSize": 30, "body": "..." }
-          ]
-        },
-        {
-          "type": "insection",
-          "radius": 20,
-          "children": [
-            { "type": "text", "title": "Discord", "titleSize": 30, "body": "Discordではいち早く最新情報を受け取れます！" },
-            { "type": "button", "title": "Discordへ参加", "color": "primary", "action": {"type": "link", "url": "https://discord.gg/ZxBS4rW3qs"}}
-          ]
+        }
+                  ]
         }
       ]
     }
