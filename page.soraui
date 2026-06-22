@@ -53,7 +53,7 @@
           "children": [
             { "type": "text", "title": "Mint Hub | Universal", "titleSize": 30, "body": "Mint Hub © Sky Project | 様々なゲームで使用することができます。" },
             {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/mint-hub-universal.lua\"))()"},
-            { "type": "button", "title": "ソースコードを見る", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/mint-hub-universal.lua"}}
+            { "type": "button", "title": "ソースコードを見る | 難読化済み", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/mint-hub-universal.lua"}}
           ]
         },
         {
@@ -62,7 +62,76 @@
           "children": [
             { "type": "text", "title": "Bloody V2 Premium Crack", "titleSize": 30, "body": "Bloody V2 | FTAP Script 完全無料で、プレミアムが使えます。" },
             {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/bloody-v2-premium.lua\"))()"},
-            { "type": "button", "title": "サイトへ行く", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/bloody-v2-premium.lua"}}
+            { "type": "button", "title": "ソースコードを見る | 難読化済み", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/bloody-v2-premium.lua"}}
+
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "height": 300,
+      "position": "bottom-center",
+      "tab": "scripts",
+      "children": [
+        {
+          "type": "insection",
+          "radius": 20,
+          "children": [
+            { "type": "text", "title": "Loadstring Tester", "titleSize": 30, "body": "Loadstring Tester © Sky Project | Loadstringされたスクリプトを検知、コピーできます。" },
+            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/mint-hub-universal.lua\"))()"},
+            { "type": "button", "title": "ソースコードを見る | オープンソース", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/loadstring-tester.lua"}}
+          ]
+        },
+        {
+          "type": "insection",
+          "radius": 20,
+          "children": [
+            { "type": "text", "title": "HttpHook Spy", "titleSize": 30, "body": "HttpHook Spy © Sky Project | Http Hookを検知できます。" },
+            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/bloody-v2-premium.lua\"))()"},
+            { "type": "button", "title": "ソースコードを見る | オープンソース", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/http-spy-loger-spy.lua"}}
+
+          ]
+        }
+      ]
+    },
+
+
+    {
+      "type": "section",
+      "id": "about2",
+      "title": "Executers",
+      "tab": "executers",
+      "children": [
+        {
+          "type": "text",
+          "title": "高速、安全、多機能。",
+          "titleSize": 30,
+          "body": "この場所で提供されてるExecuterを使えば、どんなスクリプトでも実行できます。すべて無料、または一部無料です。"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "height": 300,
+      "position": "bottom-center",
+      "tab": "executers",
+      "children": [
+        {
+          "type": "insection",
+          "radius": 20,
+          "children": [
+            { "type": "text", "title": "Real Executer", "titleSize": 30, "body": "Real Executer | sUNC 100% | IS. 5s | .gg/projectreal" },
+            { "type": "button", "title": "公式ウェブサイトへ", "color": "primary", "action": {"type": "link", "url": "https://projectreal.gg/"}}
+          ]
+        },
+        {
+          "type": "insection",
+          "radius": 20,
+          "children": [
+            { "type": "text", "title": "Madium", "titleSize": 30, "body": "Madium Executer | sUNC 100% | IS. 5s | .gg/projectreal" },
+            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/bloody-v2-premium.lua\"))()"},
+            { "type": "button", "title": "ソースコードを見る | オープンソース", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/http-spy-loger-spy.lua"}}
 
           ]
         }
