@@ -52,7 +52,7 @@
           "radius": 20,
           "children": [
             { "type": "text", "title": "Sky Scripts", "titleSize": 30, "body": "Mint Hub © Sky Project | 様々なゲームで使用することができます。" },
-            {"type": "codespace", "language": "lua", "code": "{loadstring(game:HttpGet("https://sora-scripts.vercel.app/main/mint-hub-universal.lua"))()}"
+            {"type": "codespace", "language": "lua", "code": "{loadstring(game:HttpGet(\https://sora-scripts.vercel.app/main/mint-hub-universal.lua\))()}"
             { "type": "button", "title": "ソースコードを見る", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/mint-hub-universal.lua"}}
           ]
         },
