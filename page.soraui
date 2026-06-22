@@ -60,7 +60,7 @@
           "type": "insection",
           "radius": 20,
           "children": [
-            { "type": "text", "title": "Bloody V2 Premium Crack", "titleSize": 30, "body": "すべてのゲームを無料でダウンロード、プレイができます。" },
+            { "type": "text", "title": "Bloody V2 Premium Crack", "titleSize": 30, "body": "Bloody V2 | FTAP Script 完全無料で、プレミアムが使えます。" },
             {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/bloody-v2-premium.lua\"))()"},
             { "type": "button", "title": "サイトへ行く", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/bloody-v2-premium.lua"}}
 
