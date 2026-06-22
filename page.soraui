@@ -1,0 +1,85 @@
+{
+  "theme": "darkorange",
+  "font": "Google Sans",
+  "mode": "page",
+
+  "titlebar": {
+    "title": "Sora Scripts",
+    "icon": "icon.svg"
+  },
+  "tabs": [
+    {
+      "id": "scripts",
+      "title": "Scripts"
+    },
+    {
+      "id": "executers",
+      "title": "Executers"
+    }
+  ],
+
+
+  "components": [
+    {
+      "type": "imagesection",
+      "height": 700,
+      "image": "sky.png",
+      "tab": "scripts"
+    },
+
+    {
+      "type": "section",
+      "id": "about",
+      "title": "Sora Scripts",
+      "tab": "scripts",
+      "children": [
+        {
+          "type": "text",
+          "title": "軽量、便利、安全。",
+          "titleSize": 30,
+          "body": "Sora Scriptsはどれも安全です。"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "height": 300,
+      "position": "bottom-center",
+      "tab": "scripts",
+      "children": [
+        {
+          "type": "insection",
+          "radius": 20,
+          "children": [
+            { "type": "text", "title": "Sky Scripts", "titleSize": 30, "body": "RobloxのスクリプトやExecuterがあります。安全性は保証されません。" },
+            { "type": "button", "title": "サイトへ行く", "color": "primary", "action": {"type": "link", "url": "https://sky-project-web.vercel.app/product/sky-scripts/index.html"}}
+          ]
+        },
+        {
+          "type": "insection",
+          "radius": 20,
+          "children": [
+            { "type": "text", "title": "Sky Games", "titleSize": 30, "body": "すべてのゲームを無料でダウンロード、プレイができます。" },
+            { "type": "button", "title": "サイトへ行く", "color": "primary", "action": {"type": "link", "url": "https://sky-project-web.vercel.app/product/sky-games/index.html"}}
+
+          ]
+        },
+        {
+          "type": "insection",
+          "radius": 20,
+          "children": [
+            { "type": "text", "title": "ComingSoon", "titleSize": 30, "body": "..." }
+          ]
+        },
+        {
+          "type": "insection",
+          "radius": 20,
+          "children": [
+            { "type": "text", "title": "Discord", "titleSize": 30, "body": "Discordではいち早く最新情報を受け取れます！" },
+            { "type": "button", "title": "Discordへ参加", "color": "primary", "action": {"type": "link", "url": "https://discord.gg/ZxBS4rW3qs"}}
+          ]
+        }
+      ]
+    }
+  ]
+}
