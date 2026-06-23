@@ -32,7 +32,7 @@ corner.Parent = mainFrame
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0, 40)
 title.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-title.Text = " 🕵️‍♂️ EXECUTOR HTTP SPY (Discord Monitor)"
+title.Text = " HttpHook Spy | SkyProject"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextSize = 14
 title.Font = Enum.Font.Code
@@ -63,10 +63,10 @@ toggleButton.BorderSizePixel = 0
 local function updateButton(state)
     if state then
         toggleButton.BackgroundColor3 = Color3.fromRGB(180, 60, 60)
-        toggleButton.Text = "SPY STATUS : [ ACTIVE / 監視中 ]"
+        toggleButton.Text = "SPY STATUS : [ ACTIVE ]"
     else
         toggleButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        toggleButton.Text = "SPY STATUS : [ DISABLED / 停止 ]"
+        toggleButton.Text = "SPY STATUS : [ DISABLED ]"
     end
 end
 updateButton(isHttpSpyEnabled)

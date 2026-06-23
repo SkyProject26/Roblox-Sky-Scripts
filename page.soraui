@@ -79,7 +79,7 @@
           "radius": 20,
           "children": [
             { "type": "text", "title": "Loadstring Tester", "titleSize": 30, "body": "Loadstring Tester © Sky Project | Loadstringされたスクリプトを検知、コピーできます。" },
-            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/mint-hub-universal.lua\"))()"},
+            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/loadstring-tester.lua\"))()"},
             { "type": "button", "title": "ソースコードを見る | オープンソース", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/loadstring-tester.lua"}}
           ]
         },
@@ -88,8 +88,8 @@
           "radius": 20,
           "children": [
             { "type": "text", "title": "HttpHook Spy", "titleSize": 30, "body": "HttpHook Spy © Sky Project | Http Hookを検知できます。" },
-            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/bloody-v2-premium.lua\"))()"},
-            { "type": "button", "title": "ソースコードを見る | オープンソース", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/http-spy-loger-spy.lua"}}
+            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/http-hook-spy.lua\"))()"},
+            { "type": "button", "title": "ソースコードを見る | オープンソース", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/http-hook-spy.lua"}}
 
           ]
         }
