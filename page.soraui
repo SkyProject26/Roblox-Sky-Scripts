@@ -43,7 +43,7 @@
     },
     {
       "type": "section",
-      "height": 280,
+      "height": 290,
       "position": "bottom-center",
       "tab": "scripts",
       "children": [
@@ -70,7 +70,7 @@
     },
     {
       "type": "section",
-      "height": 280,
+      "height": 290,
       "position": "bottom-center",
       "tab": "scripts",
       "children": [
