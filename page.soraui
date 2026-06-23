@@ -128,7 +128,7 @@
           "type": "insection",
           "radius": 20,
           "children": [
-            { "type": "text", "title": "Real Executer", "titleSize": 30, "body": "Real Executer | sUNC 100% | inject speed : 5s | .gg/projectreal | SkyProjectおすすめExecuter" },
+            { "type": "text", "title": "Real Executer", "titleSize": 30, "body": "Real Executer | sUNC 100% | inject speed : 5s | .gg/projectreal | SkyProjectおすすめExecuter | Free & Paid | EZ KeySystem" },
             { "type": "button", "title": "公式ウェブサイトへ", "color": "primary", "action": {"type": "link", "url": "https://projectreal.gg/"}}
           ]
         },
