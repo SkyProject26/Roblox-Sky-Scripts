@@ -43,7 +43,7 @@
     },
     {
       "type": "section",
-      "height": 300,
+      "height": 250,
       "position": "bottom-center",
       "tab": "scripts",
       "children": [
@@ -70,7 +70,7 @@
     },
     {
       "type": "section",
-      "height": 300,
+      "height": 250,
       "position": "bottom-center",
       "tab": "scripts",
       "children": [
@@ -120,7 +120,7 @@
     },
     {
       "type": "section",
-      "height": 300,
+      "height": 100,
       "position": "bottom-center",
       "tab": "executers",
       "children": [
