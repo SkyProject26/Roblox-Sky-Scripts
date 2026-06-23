@@ -137,7 +137,6 @@
           "radius": 20,
           "children": [
             { "type": "text", "title": "Madium", "titleSize": 30, "body": "Madium Executer | sUNC ??%(90+) | inject speed : ?s(10-) | .gg/olemad | SkyProjectおすすめExecuter | All Free | not KeySystem" },
-            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/bloody-v2-premium.lua\"))()"},
             { "type": "button", "title": "公式ウェブサイトへ", "color": "primary", "action": {"type": "link", "url": "https://getmadium.net/"}}
 
           ]
