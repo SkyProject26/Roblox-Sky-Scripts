@@ -1,6 +1,6 @@
 /**
  * Sora UI
- * ------------------------------------------------------------
+ * ============================================================
  * 使い方:
  *   1. index.html に以下を追加する:
  *        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -16,7 +16,45 @@
  *
  * このファイルは編集不要です。
  * UIの追加・変更はすべて .soraui ファイル側で行います。
- * ------------------------------------------------------------
+ *
+ * ============================================================
+ * v2 新機能:
+ *
+ * 【サイズ系設定】コンポーネントの大きさ
+ *   size キーで指定するか、width/height に以下のキーワードを使用可:
+ *   - "auto"    : 親要素の幅・高さ両方に 100% フィット
+ *   - "xauto"   : 横幅だけ 100%（縦は height で指定するか内容に従う）
+ *   - "yauto"   : 縦幅だけ 100%（横は width で指定するか内容に従う）
+ *   - "custom"  : width/height に指定した値をそのまま使用（デフォルト）
+ *   例:
+ *     { type: "image", size: "auto" }
+ *     { type: "section", size: "yauto", title: "ヒーロー" }
+ *
+ * 【位置系個別指定】各コンポーネントの微調整
+ *   position でプリセット配置(top-left等)を指定した後、
+ *   offsetTop / offsetRight / offsetBottom / offsetLeft で個別に位置を調整可:
+ *   例:
+ *     { type: "text", position: "top-right", offsetTop: 12, offsetRight: 8 }
+ *
+ * 【スマホ対応】mobile オーバーライド
+ *   各コンポーネントに mobile: { ...プロパティ上書き } を記述すると、
+ *   スマホ幅(≤720px)の時だけその設定に切り替わる。
+ *   titlebar / tabs / sidebar / 各component単位で指定可:
+ *   例:
+ *     { type: "text", title: "PC用", mobile: { title: "スマホ用" } }
+ *     { title: "App", mobile: { icon: "📱" } }  (titlebar)
+ *
+ * 【タイトルバー常時表示】
+ *   タイトルバーが position: sticky で常に画面上部に固定される。
+ *   Docs モードでも同様に タイトルバーが最上部に表示されるように改善。
+ *
+ * 【Docs モード全面改善】
+ *   - タイトルバーが Page モードと統一されたデザインで表示
+ *   - tabs が指定されている場合、タブ毎に sidebar を切り替え可能
+ *   - モバイル幅ではタイトルバーのハンバーガーでサイドバー開閉
+ *   - sticky な sidebar が titlebar の高さを考慮して配置される
+ *
+ * ============================================================
  */
 
 (function () {
@@ -150,7 +188,8 @@
         padding: 0;
       }
 
-      /* ---- Titlebar ---- */
+      /* ---- Titlebar ----
+         常に画面上部に固定表示（sticky）。Page / Docs 両モード共通で使う。 */
       .ui-titlebar {
         display: flex;
         align-items: center;
@@ -158,6 +197,9 @@
         padding: 14px 24px;
         border-bottom: 1px solid var(--ui-border);
         background: var(--ui-surface);
+        position: sticky;
+        top: 0;
+        z-index: 200;
       }
 
       .ui-titlebar-icon {
@@ -189,6 +231,14 @@
         flex-direction: column;
         gap: 4px;
         justify-content: center;
+      }
+
+      /* サイドバー開閉用ハンバーガー（Docsモード）。タイトルバー左端に出すので
+         右寄せの margin-left:auto を打ち消す。常にモバイル幅でのみ表示。 */
+      .ui-hamburger--sidebar {
+        display: none;
+        margin-left: 0;
+        margin-right: 4px;
       }
 
       .ui-hamburger span {
@@ -231,15 +281,17 @@
       }
 
       @media (max-width: 720px) {
-        .ui-titlebar {
-          position: relative;
-        }
-
         .ui-titlebar-tabs {
           display: none;
         }
 
         .ui-hamburger {
+          display: flex;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .ui-hamburger--sidebar {
           display: flex;
         }
       }
@@ -587,12 +639,44 @@
         margin: 24px;
       }
 
-      /* ---- Docs mode ---- */
+      /* ---- Docs mode ----
+         titlebar (sticky, top:0) の下に sidebar + content を並べる。
+         sidebar は titlebar の高さを引いた残りの領域で sticky させる。
+         CSS変数 --ui-titlebar-h は JS 側で titlebar の実測高さを入れる
+         （titlebar が無い場合は 0px）。 */
+      .ui-docs-wrap {
+        --ui-titlebar-h: 0px;
+      }
+
+      /* タブ付きDocsモード: タブごとに丸ごとの docsRow(sidebar+content) を
+         切り替える。非アクティブなものは display:none で隠す */
+      .ui-docs-tabwrapper {
+        display: block;
+      }
+
+      .ui-docs-tabpanel {
+        display: none;
+      }
+
+      .ui-docs-tabpanel.is-active {
+        display: flex;
+      }
+
       .ui-docs {
         display: flex;
         align-items: stretch;
         gap: 0;
-        min-height: 100vh;
+        min-height: calc(100vh - var(--ui-titlebar-h));
+      }
+
+      /* .ui-docs と .ui-docs-tabpanel の両方を持つ要素は、CSS定義順に関わらず
+         タブの開閉状態を確実に優先させる */
+      .ui-docs.ui-docs-tabpanel {
+        display: none;
+      }
+
+      .ui-docs.ui-docs-tabpanel.is-active {
+        display: flex;
       }
 
       .ui-docs-sidebar {
@@ -602,21 +686,9 @@
         border-right: 1px solid var(--ui-border);
         padding: 16px 12px 24px;
         position: sticky;
-        top: 0;
-        height: 100vh;
+        top: var(--ui-titlebar-h);
+        height: calc(100vh - var(--ui-titlebar-h));
         overflow-y: auto;
-      }
-
-      .ui-docs-brand {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 15px;
-        font-weight: 700;
-        color: var(--ui-text);
-        padding: 8px 10px 16px;
-        margin-bottom: 4px;
-        border-bottom: 1px solid var(--ui-border);
       }
 
       .ui-docs-content {
@@ -632,26 +704,16 @@
         max-width: 720px;
       }
 
-      /* ---- Docs: mobile sidebar (hamburger overlay) ---- */
-      .ui-docs-mobile-bar {
-        display: none;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 16px;
-        border-bottom: 1px solid var(--ui-border);
-        background: var(--ui-surface);
-      }
-
-      .ui-docs-mobile-bar .ui-docs-brand {
-        border-bottom: none;
-        padding: 0;
-        margin-bottom: 0;
-      }
-
+      /* ---- Docs: mobile sidebar overlay ----
+         モバイル幅では titlebar のハンバーガーで開閉する。
+         サイドバーは titlebar の下から画面下端まで覆う固定パネルになる。 */
       .ui-docs-overlay {
         display: none;
         position: fixed;
-        inset: 0;
+        top: var(--ui-titlebar-h);
+        left: 0;
+        right: 0;
+        bottom: 0;
         background: rgba(0, 0, 0, 0.4);
         z-index: 90;
       }
@@ -665,15 +727,11 @@
           position: relative;
         }
 
-        .ui-docs-mobile-bar {
-          display: flex;
-        }
-
         .ui-docs-sidebar {
           position: fixed;
-          top: 0;
+          top: var(--ui-titlebar-h);
           left: 0;
-          height: 100vh;
+          height: calc(100vh - var(--ui-titlebar-h));
           z-index: 100;
           transform: translateX(-100%);
           transition: transform 0.2s ease;
@@ -682,10 +740,6 @@
 
         .ui-docs-sidebar.is-open {
           transform: translateX(0);
-        }
-
-        .ui-docs-sidebar .ui-docs-brand {
-          display: none;
         }
 
         .ui-docs-content {
@@ -873,7 +927,20 @@
   }
 
   /* ============================================================
-   * 5. position の適用（親要素基準、9方向）
+   * 5. position / size / mobile の適用
+   * ------------------------------------------------------------
+   * position: 親要素基準の9方向プリセット（従来通り）
+   * offset(top/right/bottom/left): 個別の位置を1つずつ上書き指定できる
+   *   例: { position: "top-right", offsetTop: 12, offsetRight: 12 }
+   *   -> 9方向の配置はそのまま使いつつ、絶対位置で微調整したい場合は
+   *      offsetX/offsetY を指定すると要素自体を相対的にずらす(transform)
+   * size: 大きさ系のキーワード
+   *   - "auto"   : 親(セレクション)の幅・高さの両方に合わせる
+   *   - "xauto"  : 横幅だけ親に合わせる(縦は内容に従う/heightで個別指定可)
+   *   - "yauto"  : 縦幅だけ親に合わせる(横は内容に従う/widthで個別指定可)
+   *   - "custom" : width / height に指定した値をそのまま使う(従来通り)
+   *   size を指定しない場合は、width/height の値がそのままキーワードかどうかも
+   *   個別にチェックする(後方互換: width:"auto" 等の直接指定にも対応)
    * ============================================================ */
   function applyPosition(el, position) {
     if (!position) return;
@@ -886,9 +953,110 @@
     el.style.alignItems = map.align;
   }
 
+  // 個別オフセット(offsetTop/offsetRight/offsetBottom/offsetLeft)を適用する。
+  // 指定がある場合は要素を position:relative にして個別にずらす。
+  // position(9方向プリセット)と併用可能（プリセットで大まかに置いてから微調整する用途）。
+  function applyOffset(el, def) {
+    const hasOffset =
+      def.offsetTop !== undefined ||
+      def.offsetRight !== undefined ||
+      def.offsetBottom !== undefined ||
+      def.offsetLeft !== undefined;
+    if (!hasOffset) return;
+
+    const currentPosition = el.style.position;
+    if (!currentPosition || currentPosition === "static") {
+      el.style.position = "relative";
+    }
+    if (def.offsetTop !== undefined) el.style.top = toCssSize(def.offsetTop);
+    if (def.offsetRight !== undefined) el.style.right = toCssSize(def.offsetRight);
+    if (def.offsetBottom !== undefined) el.style.bottom = toCssSize(def.offsetBottom);
+    if (def.offsetLeft !== undefined) el.style.left = toCssSize(def.offsetLeft);
+  }
+
   // 数値が来たら px を付け、文字列(例: "1.5rem")はそのまま使う
   function toCssSize(value) {
     return typeof value === "number" ? `${value}px` : value;
+  }
+
+  const SIZE_KEYWORDS = ["auto", "xauto", "yauto", "custom"];
+
+  function isSizeKeyword(value) {
+    return typeof value === "string" && SIZE_KEYWORDS.includes(value);
+  }
+
+  /**
+   * 大きさ系の設定を要素に適用する。
+   * def.size（推奨）、または def.width / def.height にキーワードを直接書く
+   * 後方互換の両方に対応する。
+   *
+   *   size: "auto"    -> width:100%; height:100%
+   *   size: "xauto"   -> width:100%; height は def.height があればそれを使う(無ければ auto)
+   *   size: "yauto"   -> height:100%; width は def.width があればそれを使う(無ければ auto)
+   *   size: "custom"  -> width/height を def.width / def.height の値そのまま使う
+   *
+   * def.width / def.height は size とは独立して個別にも解釈される:
+   *   width: "auto"  -> その要素の width だけ親に合わせる
+   *   width: "xauto" / "yauto" は width 単体では意味が無いため auto 扱いにフォールバックする
+   */
+  function applySize(el, def) {
+    const size = def.size;
+
+    function resolveAxis(axisValue, fillKeyword) {
+      // "auto" 系キーワードが来たら 100%、"custom" または通常値はそのまま、未指定は触らない
+      if (axisValue === undefined || axisValue === null) return undefined;
+      if (axisValue === fillKeyword || axisValue === "auto") return "100%";
+      if (axisValue === "custom") return undefined; // custom指定だが値が無い -> 何もしない
+      return toCssSize(axisValue);
+    }
+
+    if (size === "auto") {
+      el.style.width = "100%";
+      el.style.height = "100%";
+    } else if (size === "xauto") {
+      el.style.width = "100%";
+      if (def.height !== undefined) el.style.height = resolveAxis(def.height, "yauto");
+    } else if (size === "yauto") {
+      el.style.height = "100%";
+      if (def.width !== undefined) el.style.width = resolveAxis(def.width, "xauto");
+    } else {
+      // size: "custom" または size 未指定 -> width/height を個別に見る
+      // （width/height自体に auto系キーワードが直接書かれているケースも吸収する）
+      if (def.width !== undefined) {
+        if (def.width === "auto" || def.width === "xauto") {
+          el.style.width = "100%";
+        } else if (def.width !== "custom" && def.width !== "yauto") {
+          el.style.width = toCssSize(def.width);
+        }
+      }
+      if (def.height !== undefined) {
+        if (def.height === "auto" || def.height === "yauto") {
+          el.style.height = "100%";
+        } else if (def.height !== "custom" && def.height !== "xauto") {
+          el.style.height = toCssSize(def.height);
+        }
+      }
+    }
+  }
+
+  /* ============================================================
+   * 5b. モバイル判定 & コンポーネント単位のモバイル上書き
+   * ------------------------------------------------------------
+   * 各コンポーネント定義に "mobile": { ...上書きしたいプロパティ } を
+   * 書くと、画面幅が MOBILE_BREAKPOINT 以下の時だけそのプロパティで
+   * 上書きしたものとして扱う。ネストした mobile.mobile は無視する。
+   * ============================================================ */
+  const MOBILE_BREAKPOINT = 720;
+
+  function isMobileViewport() {
+    return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
+  }
+
+  // def と def.mobile をマージした「実際に使う定義」を返す。
+  // モバイル幅でなければ def をそのまま返す。
+  function resolveResponsive(def) {
+    if (!def || !def.mobile || !isMobileViewport()) return def;
+    return Object.assign({}, def, def.mobile, { mobile: undefined });
   }
 
   /* ============================================================
@@ -955,14 +1123,17 @@
   }
 
   // type: "text"
-  // type: "text"
   // プリセット: title(大) / description(小・薄) / body(本文)
   // カスタムサイズ: titleSize / descriptionSize / bodySize を数値(px)で指定すると上書きできる
+  // size/width/height: ブロック全体の大きさ(auto/xauto/yauto/custom)
+  // offsetTop/Right/Bottom/Left: position プリセットからの微調整
   function createText(def) {
     const wrap = document.createElement("div");
     wrap.className = "ui-text-block";
     if (def.id) wrap.id = def.id;
     applyPosition(wrap, def.position);
+    applySize(wrap, def);
+    applyOffset(wrap, def);
 
     if (def.title) {
       const h = document.createElement("h3");
@@ -1079,11 +1250,19 @@
 
   // type: "imagesection"
   // children を指定すると、画像の上に重ねて表示する（見出し・ボタンなどを置けるヒーロー的な使い方）
+  // 横幅は常に画面幅いっぱい(帯)。高さは size:"yauto"(画面の高さに合わせる) または
+  // 数値・height で個別指定できる。
   function createImageSection(def, ctx) {
     const wrap = document.createElement("div");
     wrap.className = "ui-imagesection";
     if (def.id) wrap.id = def.id;
-    if (def.height) wrap.style.height = toCssSize(def.height);
+
+    if (def.size === "auto" || def.size === "yauto") {
+      wrap.style.height = "100vh";
+    } else if (def.height) {
+      wrap.style.height = toCssSize(def.height);
+    }
+    applyOffset(wrap, def);
 
     const img = document.createElement("img");
     img.src = def.image || "";
@@ -1108,23 +1287,25 @@
 
   // type: "image"
   // section の中などに置く単体の画像。position で section 内の配置を指定できる
+  // size: "auto"(セレクションの大きさに合わせる) / "xauto"(横幅のみ) / "yauto"(縦幅のみ) / "custom"(width/heightをそのまま使用)
   function createImage(def) {
     const wrap = document.createElement("div");
     wrap.className = "ui-image-wrap";
     if (def.id) wrap.id = def.id;
     applyPosition(wrap, def.position);
+    applyOffset(wrap, def);
 
     const img = document.createElement("img");
     img.src = def.src || def.image || "";
     img.alt = def.alt || "";
-    if (def.width) img.style.width = toCssSize(def.width);
-    if (def.height) img.style.height = toCssSize(def.height);
+    applySize(img, def);
 
     wrap.appendChild(img);
     return wrap;
   }
 
   // type: "insection" の1個分（横並びの中の1枠）
+  // size: "auto"/"xauto"/"yauto"/"custom" で枠自体の大きさを制御できる
   function createInSection(def, ctx) {
     const el = document.createElement("div");
     el.className = "ui-insection";
@@ -1133,6 +1314,8 @@
       el.style.borderRadius = typeof def.radius === "number" ? `${def.radius}px` : def.radius;
     }
     applyPosition(el, def.position);
+    applySize(el, def);
+    applyOffset(el, def);
 
     (def.children || []).forEach((child) => {
       const childEl = createComponent(child, ctx);
@@ -1143,11 +1326,18 @@
   }
 
   // type: "section"
+  // size: "yauto"/"auto" を指定すると画面の高さに揃う(ヒーローセクション的な使い方ができる)
   function createSection(def, ctx) {
     const wrap = document.createElement("section");
     wrap.className = "ui-section";
     if (def.id) wrap.id = def.id;
-    if (def.height) wrap.style.height = toCssSize(def.height);
+
+    if (def.size === "auto" || def.size === "yauto") {
+      wrap.style.height = "100vh";
+    } else if (def.height) {
+      wrap.style.height = toCssSize(def.height);
+    }
+    applyOffset(wrap, def);
 
     if (def.title) {
       const h = document.createElement("h3");
@@ -1160,7 +1350,7 @@
     body.className = "ui-section-body";
     applyPosition(body, def.position);
 
-    const children = def.children || [];
+    const children = (def.children || []).map(resolveResponsive);
 
     // children が insection だけの場合は、横並びの行としてまとめる
     const insections = children.filter((c) => c.type === "insection");
@@ -1186,7 +1376,10 @@
   }
 
   // type に応じて生成関数を振り分ける
-  function createComponent(def, ctx) {
+  // ここで resolveResponsive を一度だけ通すことで、mobile オーバーライドが
+  // 全コンポーネントタイプに対して自動的に効くようにしている
+  function createComponent(rawDef, ctx) {
+    const def = resolveResponsive(rawDef);
     switch (def.type) {
       case "button":
         return createButton(def, ctx);
@@ -1213,12 +1406,118 @@
   }
 
   /* ============================================================
+   * 7b. Titlebar 生成（Page / Docs 共通）
+   * ------------------------------------------------------------
+   * titlebarDef: data.titlebar の内容
+   * tabs: data.tabs（タブの配列。空配列ならタブUIは作らない）
+   * ctx: switchTab を持つ共有コンテキスト
+   * options.sidebarToggle: Docsモードのサイドバー開閉ハンバーガーを
+   *   タイトルバーの左側に追加したい場合に、その場で呼ぶ関数を渡す
+   * 戻り値: { el: タイトルバーのDOM要素 }
+   * ============================================================ */
+  function createTitlebar(titlebarDef, tabs, ctx, options) {
+    options = options || {};
+    const titlebar = document.createElement("div");
+    titlebar.className = "ui-titlebar";
+
+    // Docsモードのサイドバー開閉ボタン（指定があれば左端に出す）
+    if (options.sidebarToggle) {
+      const sidebarHamburger = document.createElement("button");
+      sidebarHamburger.type = "button";
+      sidebarHamburger.className = "ui-hamburger ui-hamburger--sidebar";
+      sidebarHamburger.setAttribute("aria-label", "サイドバーを開く");
+      sidebarHamburger.innerHTML = "<span></span><span></span><span></span>";
+      sidebarHamburger.addEventListener("click", options.sidebarToggle);
+      titlebar.appendChild(sidebarHamburger);
+    }
+
+    const icon = createIconElement(titlebarDef.icon, "ui-titlebar-icon-wrap");
+    if (icon) {
+      // titlebar用は img のサイズをそのまま使うので class を差し替える
+      if (icon.firstChild && icon.firstChild.tagName === "IMG") {
+        icon.firstChild.className = "ui-titlebar-icon";
+        titlebar.appendChild(icon.firstChild);
+      } else {
+        titlebar.appendChild(icon);
+      }
+    }
+
+    if (titlebarDef.title) {
+      const title = document.createElement("span");
+      title.className = "ui-titlebar-title";
+      title.textContent = titlebarDef.title;
+      titlebar.appendChild(title);
+    }
+
+    // タブは titlebar の中に表示する
+    // （デスクトップ幅では横並び、モバイル幅ではハンバーガー+ドロップダウンに切り替わる）
+    if (tabs.length > 0) {
+      const tabWrap = document.createElement("div");
+      tabWrap.className = "ui-titlebar-tabs";
+
+      const dropdown = document.createElement("div");
+      dropdown.className = "ui-titlebar-tabs-dropdown";
+
+      tabs.forEach((tab, index) => {
+        const makeTabItem = () => {
+          const tabItem = document.createElement("div");
+          tabItem.className = "ui-titlebar-tab-item" + (index === 0 ? " is-active" : "");
+          tabItem.textContent = tab.title || tab.id;
+          tabItem.dataset.tabId = tab.id;
+          tabItem.addEventListener("click", () => {
+            if (ctx.switchTab) ctx.switchTab(tab.id);
+            dropdown.classList.remove("is-open");
+          });
+          return tabItem;
+        };
+
+        tabWrap.appendChild(makeTabItem());
+        dropdown.appendChild(makeTabItem());
+      });
+
+      titlebar.appendChild(tabWrap);
+
+      // ハンバーガーボタン（モバイル幅でのみ表示される。タブ切り替え用）
+      const hamburger = document.createElement("button");
+      hamburger.type = "button";
+      hamburger.className = "ui-hamburger";
+      hamburger.setAttribute("aria-label", "メニューを開く");
+      hamburger.innerHTML = "<span></span><span></span><span></span>";
+      hamburger.addEventListener("click", () => {
+        dropdown.classList.toggle("is-open");
+      });
+
+      titlebar.appendChild(hamburger);
+      titlebar.appendChild(dropdown);
+    }
+
+    return titlebar;
+  }
+
+  // titlebar の実測高さを CSS変数 --ui-titlebar-h に反映する。
+  // Docs モードのサイドバー sticky / overlay の top 位置計算に使う。
+  // ResizeObserver があれば、タブ⇔ハンバーガー切り替え等で titlebar の
+  // 高さが変わった時にも自動で追従させる（無ければ初回計測のみ）。
+  function syncTitlebarHeightVar(root, titlebarEl) {
+    const update = () => {
+      const h = titlebarEl ? titlebarEl.getBoundingClientRect().height : 0;
+      root.style.setProperty("--ui-titlebar-h", `${h}px`);
+    };
+    update();
+
+    if (titlebarEl && typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver(update);
+      observer.observe(titlebarEl);
+    }
+  }
+
+  /* ============================================================
    * 8. page モードの描画
    *    titlebar の中にタブを表示し、タブごとに components を振り分ける
    * ============================================================ */
   function renderPage(root, data) {
-    const titlebarDef = data.titlebar;
-    const tabs = data.tabs || [];
+    const titlebarDef = resolveResponsive(data.titlebar);
+    const tabs = (data.tabs || []).map(resolveResponsive);
     const components = data.components || [];
 
     const panels = {};
@@ -1226,71 +1525,9 @@
 
     // ---- Titlebar ----
     if (titlebarDef) {
-      const titlebar = document.createElement("div");
-      titlebar.className = "ui-titlebar";
-
-      const icon = createIconElement(titlebarDef.icon, "ui-titlebar-icon-wrap");
-      if (icon) {
-        // titlebar用は img のサイズをそのまま使うので class を差し替える
-        if (icon.firstChild && icon.firstChild.tagName === "IMG") {
-          icon.firstChild.className = "ui-titlebar-icon";
-          titlebar.appendChild(icon.firstChild);
-        } else {
-          titlebar.appendChild(icon);
-        }
-      }
-
-      if (titlebarDef.title) {
-        const title = document.createElement("span");
-        title.className = "ui-titlebar-title";
-        title.textContent = titlebarDef.title;
-        titlebar.appendChild(title);
-      }
-
-      // page モードでは、タブは titlebar の中に表示する
-      // （デスクトップ幅では横並び、モバイル幅ではハンバーガー+ドロップダウンに切り替わる）
-      let dropdown = null;
-      if (tabs.length > 0) {
-        const tabWrap = document.createElement("div");
-        tabWrap.className = "ui-titlebar-tabs";
-
-        dropdown = document.createElement("div");
-        dropdown.className = "ui-titlebar-tabs-dropdown";
-
-        tabs.forEach((tab, index) => {
-          const makeTabItem = () => {
-            const tabItem = document.createElement("div");
-            tabItem.className = "ui-titlebar-tab-item" + (index === 0 ? " is-active" : "");
-            tabItem.textContent = tab.title || tab.id;
-            tabItem.dataset.tabId = tab.id;
-            tabItem.addEventListener("click", () => {
-              ctx.switchTab(tab.id);
-              dropdown.classList.remove("is-open");
-            });
-            return tabItem;
-          };
-
-          tabWrap.appendChild(makeTabItem());
-          dropdown.appendChild(makeTabItem());
-        });
-
-        titlebar.appendChild(tabWrap);
-
-        // ハンバーガーボタン（モバイル幅でのみ表示される）
-        const hamburger = document.createElement("button");
-        hamburger.type = "button";
-        hamburger.className = "ui-hamburger";
-        hamburger.setAttribute("aria-label", "メニューを開く");
-        hamburger.innerHTML = "<span></span><span></span><span></span>";
-        hamburger.addEventListener("click", () => {
-          dropdown.classList.toggle("is-open");
-        });
-
-        titlebar.appendChild(hamburger);
-        titlebar.appendChild(dropdown);
-      }
-
+      const titlebar = createTitlebar(titlebarDef, tabs, ctx);
       root.appendChild(titlebar);
+      syncTitlebarHeightVar(root, titlebar);
     }
 
     const pageBody = document.createElement("div");
@@ -1337,81 +1574,105 @@
    * 9. Docs モードの描画（GitBook / Notion風）
    *    sidebar定義から「カテゴリ -> ページ」の1階層サイドバーを作り、
    *    componentsをpage idごとに振り分けて右側に表示する。
-   *    tabs が指定されていれば、サイドバーの上にタブも表示できる。
+   *    titlebar / tabs は Page モードと同じ共通関数で生成し、常に
+   *    画面上部に固定表示する。tabs を指定した場合は、タブごとに
+   *    sidebar + components の組がまるごと切り替わる
+   *    （tab.sidebar / 各componentのtabプロパティで振り分け）。
    * ============================================================ */
   function renderDocs(root, data) {
-    const sidebarDef = data.sidebar || [];
+    const titlebarDef = resolveResponsive(data.titlebar);
+    const tabs = (data.tabs || []).map(resolveResponsive);
+    const sidebarDef = (data.sidebar || []).map(resolveResponsive);
     const components = data.components || [];
 
     root.classList.add("ui-docs-wrap");
 
+    const ctx = { switchTab: null };
+
+    // ---- サイドバー開閉（モバイル幅でタイトルバーのハンバーガーから操作） ----
+    const overlay = document.createElement("div");
+    overlay.className = "ui-docs-overlay";
+
+    function closeSidebar() {
+      sidebarEls.forEach((s) => s.classList.remove("is-open"));
+      overlay.classList.remove("is-open");
+    }
+
+    function openSidebar() {
+      sidebarEls.forEach((s) => s.classList.add("is-open"));
+      overlay.classList.add("is-open");
+    }
+
+    overlay.addEventListener("click", closeSidebar);
+
+    // ---- Titlebar（Pageモードと共通。常に最上部にsticky表示） ----
+    const sidebarEls = [];
+    if (titlebarDef) {
+      const titlebar = createTitlebar(titlebarDef, tabs, ctx, {
+        sidebarToggle: openSidebar,
+      });
+      root.appendChild(titlebar);
+      syncTitlebarHeightVar(root, titlebar);
+    } else {
+      root.style.setProperty("--ui-titlebar-h", "0px");
+    }
+
+    // ---- タブが無い場合は、sidebarDef 1セットだけのシンプルな Docs ----
+    if (tabs.length === 0) {
+      const built = buildDocsBody(sidebarDef, components, ctx, closeSidebar, null);
+      sidebarEls.push(built.sidebarEl);
+      root.appendChild(overlay);
+      root.appendChild(built.docsRow);
+      return;
+    }
+
+    // ---- タブがある場合: タブごとに「カテゴリ一覧 + ページ」一式を切り替える ----
+    // tab.sidebar が指定されていればそのタブ専用のサイドバーを使い、
+    // 無ければルートの sidebarDef を共通で使う。
+    // component の振り分けは component.tab で行う（無指定の場合は最初のタブに入る）。
+    const tabBodies = {};
+    const wrapper = document.createElement("div");
+    wrapper.className = "ui-docs-tabwrapper";
+
+    tabs.forEach((tab, index) => {
+      const tabSidebarDef = (tab.sidebar || sidebarDef).map(resolveResponsive);
+      const tabComponents = components.filter((c) => (c.tab || tabs[0].id) === tab.id);
+      const built = buildDocsBody(tabSidebarDef, tabComponents, ctx, closeSidebar, tab.id);
+      built.docsRow.classList.toggle("is-active", index === 0);
+      built.docsRow.classList.add("ui-docs-tabpanel");
+      sidebarEls.push(built.sidebarEl);
+      tabBodies[tab.id] = built.docsRow;
+      wrapper.appendChild(built.docsRow);
+    });
+
+    ctx.switchTab = function (tabId) {
+      document.querySelectorAll(".ui-titlebar-tab-item").forEach((el) => {
+        el.classList.toggle("is-active", el.dataset.tabId === tabId);
+      });
+      Object.entries(tabBodies).forEach(([id, el]) => {
+        el.classList.toggle("is-active", id === tabId);
+      });
+    };
+
+    root.appendChild(overlay);
+    root.appendChild(wrapper);
+  }
+
+  // sidebar + content の組を1セット作る。タブ無し/タブ1つ分のどちらでも使う。
+  // 戻り値: { docsRow, sidebarEl }
+  function buildDocsBody(sidebarDef, components, ctx, closeSidebar, tabId) {
     const docsRow = document.createElement("div");
     docsRow.className = "ui-docs";
+    if (tabId) docsRow.dataset.tabId = tabId;
 
     const sidebar = document.createElement("nav");
     sidebar.className = "ui-docs-sidebar";
-
-    if (data.titlebar && data.titlebar.title) {
-      const brand = document.createElement("div");
-      brand.className = "ui-docs-brand";
-
-      const brandIcon = createIconElement(data.titlebar.icon);
-      if (brandIcon) brand.appendChild(brandIcon);
-
-      const brandLabel = document.createElement("span");
-      brandLabel.textContent = data.titlebar.title;
-      brand.appendChild(brandLabel);
-
-      sidebar.appendChild(brand);
-    }
 
     const searchBox = document.createElement("input");
     searchBox.type = "text";
     searchBox.className = "ui-docs-search";
     searchBox.placeholder = "ページを検索...";
     sidebar.appendChild(searchBox);
-
-    // ---- モバイル用の上部バー（ハンバーガー + ブランド表示） ----
-    const overlay = document.createElement("div");
-    overlay.className = "ui-docs-overlay";
-
-    function closeSidebar() {
-      sidebar.classList.remove("is-open");
-      overlay.classList.remove("is-open");
-    }
-
-    function openSidebar() {
-      sidebar.classList.add("is-open");
-      overlay.classList.add("is-open");
-    }
-
-    overlay.addEventListener("click", closeSidebar);
-
-    const mobileBar = document.createElement("div");
-    mobileBar.className = "ui-docs-mobile-bar";
-
-    const hamburger = document.createElement("button");
-    hamburger.type = "button";
-    hamburger.className = "ui-hamburger";
-    hamburger.style.display = "flex";
-    hamburger.setAttribute("aria-label", "メニューを開く");
-    hamburger.innerHTML = "<span></span><span></span><span></span>";
-    hamburger.addEventListener("click", openSidebar);
-    mobileBar.appendChild(hamburger);
-
-    if (data.titlebar && data.titlebar.title) {
-      const mobileBrand = document.createElement("div");
-      mobileBrand.className = "ui-docs-brand";
-
-      const mobileBrandIcon = createIconElement(data.titlebar.icon);
-      if (mobileBrandIcon) mobileBrand.appendChild(mobileBrandIcon);
-
-      const mobileBrandLabel = document.createElement("span");
-      mobileBrandLabel.textContent = data.titlebar.title;
-      mobileBrand.appendChild(mobileBrandLabel);
-
-      mobileBar.appendChild(mobileBrand);
-    }
 
     const content = document.createElement("div");
     content.className = "ui-docs-content";
@@ -1423,7 +1684,6 @@
     const panels = {};
     const pageOrder = [];
     let firstPageId = null;
-    const ctx = { switchTab: null };
 
     sidebarDef.forEach((category) => {
       const catEl = document.createElement("div");
@@ -1539,9 +1799,8 @@
 
     docsRow.appendChild(sidebar);
     docsRow.appendChild(content);
-    root.appendChild(mobileBar);
-    root.appendChild(overlay);
-    root.appendChild(docsRow);
+
+    return { docsRow, sidebarEl: sidebar };
   }
 
   function createPageNavLink(page, label, direction, onClick) {
@@ -1563,7 +1822,104 @@
   }
 
   /* ============================================================
-   * 10. エラー表示（読み込み・JSON解析に失敗した場合）
+   * 10. サンプル JSON の例
+   *    以下は .soraui ファイルの記述例。data-soraui-src で指定したファイルに
+   *    このような JSON を書いて SoraUI.render("#app", data) で動作する。
+   *
+   * ---- Page モード（タブ付き）の例 ----
+   * {
+   *   "theme": "whiteorange",
+   *   "mode": "Page",
+   *   "titlebar": { "title": "My App", "icon": "🚀" },
+   *   "tabs": [
+   *     { "id": "home", "title": "ホーム" },
+   *     { "id": "settings", "title": "設定" }
+   *   ],
+   *   "components": [
+   *     {
+   *       "type": "section",
+   *       "tab": "home",
+   *       "title": "ウェルカム",
+   *       "size": "yauto",
+   *       "children": [
+   *         {
+   *           "type": "text",
+   *           "position": "center-middle",
+   *           "offsetTop": 20,
+   *           "title": "PC/スマホ対応",
+   *           "body": "このテキストは両デバイスで表示されます",
+   *           "mobile": { "title": "スマホでは短い" }
+   *         }
+   *       ]
+   *     },
+   *     {
+   *       "type": "text",
+   *       "tab": "settings",
+   *       "title": "設定画面",
+   *       "body": "スマホでは非表示にしたい項目..."
+   *     }
+   *   ]
+   * }
+   *
+   * ---- Docs モード（サイドバー + タブ）の例 ----
+   * {
+   *   "theme": "darkblue",
+   *   "mode": "Docs",
+   *   "titlebar": { "title": "ドキュメント", "icon": "📘" },
+   *   "tabs": [
+   *     { "id": "guide", "title": "ガイド" },
+   *     { "id": "api", "title": "API リファレンス" }
+   *   ],
+   *   "sidebar": [
+   *     {
+   *       "id": "intro",
+   *       "title": "はじめに",
+   *       "icon": "🚀",
+   *       "pages": [
+   *         { "id": "overview", "title": "概要" },
+   *         { "id": "install", "title": "インストール" }
+   *       ]
+   *     },
+   *     {
+   *       "id": "advanced",
+   *       "title": "詳細",
+   *       "icon": "⚙️",
+   *       "pages": [
+   *         { "id": "config", "title": "設定" }
+   *       ]
+   *     }
+   *   ],
+   *   "components": [
+   *     { "type": "text", "tab": "guide", "page": "overview", "title": "ガイド: 概要", "body": "..." },
+   *     { "type": "text", "tab": "api", "page": "api-page", "title": "API リファレンス", "body": "..." }
+   *   ]
+   * }
+   *
+   * ---- 新機能: size / offset / mobile の使い方 ----
+   * {
+   *   "components": [
+   *     {
+   *       "type": "image",
+   *       "src": "pic.png",
+   *       "size": "xauto",
+   *       "height": 300,
+   *       "mobile": { "size": "auto", "height": 150 }
+   *     },
+   *     {
+   *       "type": "text",
+   *       "position": "top-right",
+   *       "offsetTop": 16,
+   *       "offsetRight": 12,
+   *       "title": "コーナー配置 + 微調整",
+   *       "mobile": { "position": "top-center", "offsetTop": 0, "offsetRight": 0 }
+   *     }
+   *   ]
+   * }
+   *
+   * ============================================================ */
+
+  /* ============================================================
+   * 11. エラー表示（読み込み・JSON解析に失敗した場合）
    * ============================================================ */
   function renderError(root, message) {
     const pre = document.createElement("div");
@@ -1573,7 +1929,7 @@
   }
 
   /* ============================================================
-   * 11. 描画の共通処理
+   * 12. 描画の共通処理
    * ============================================================ */
   function renderData(root, data) {
     root.innerHTML = "";
@@ -1591,7 +1947,7 @@
   }
 
   /* ============================================================
-   * 12. 起動処理（ファイル読み込みルート）
+   * 13. 起動処理（ファイル読み込みルート）
    * ============================================================ */
   async function mountElement(root) {
     const src = root.dataset.sorauiSrc;
