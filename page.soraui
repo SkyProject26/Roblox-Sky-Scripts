@@ -53,7 +53,7 @@
           "children": [
             { "type": "text", "title": "Mint Hub | Universal", "titleSize": 30, "body": "Mint Hub © Sky Project | 様々なゲームで使用することができます。" },
             {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/mint-hub-universal.lua\"))()"},
-            { "type": "button", "title": "ソースコードを見る | 難読化済み", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/mint-hub-universal.lua"}}
+            { "type": "button", "title": "ソースコードを見る | 難読化済み", "color": "primary", "size": "xauto", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/mint-hub-universal.lua"}}
           ]
         },
         {
@@ -62,7 +62,7 @@
           "children": [
             { "type": "text", "title": "Bloody V2 Premium Crack", "titleSize": 30, "body": "Bloody V2 | FTAP Script 完全無料で、プレミアムが使えます。" },
             {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/bloody-v2-premium.lua\"))()"},
-            { "type": "button", "title": "ソースコードを見る | 難読化済み", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/bloody-v2-premium.lua"}}
+            { "type": "button", "title": "ソースコードを見る | 難読化済み", "color": "primary", "size": "xauto", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/bloody-v2-premium.lua"}}
 
           ]
         }
@@ -80,7 +80,7 @@
           "children": [
             { "type": "text", "title": "Loadstring Tester", "titleSize": 30, "body": "Loadstring Tester © Sky Project | Loadstringされたスクリプトを検知、コピーできます。" },
             {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/loadstring-tester.lua\"))()"},
-            { "type": "button", "title": "ソースコードを見る | オープンソース", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/loadstring-tester.lua"}}
+            { "type": "button", "title": "ソースコードを見る | オープンソース", "color": "primary", "size": "xauto", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/loadstring-tester.lua"}}
           ]
         },
         {
@@ -89,7 +89,7 @@
           "children": [
             { "type": "text", "title": "HttpHook Spy", "titleSize": 30, "body": "HttpHook Spy © Sky Project | Http Hookを検知できます。" },
             {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://sora-scripts.vercel.app/main/http-hook-spy.lua\"))()"},
-            { "type": "button", "title": "ソースコードを見る | オープンソース", "color": "primary", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/http-hook-spy.lua"}}
+            { "type": "button", "title": "ソースコードを見る | オープンソース", "color": "primary", "size": "xauto", "action": {"type": "link", "url": "https://sora-scripts.vercel.app/main/http-hook-spy.lua"}}
 
           ]
         }
@@ -129,7 +129,7 @@
           "radius": 20,
           "children": [
             { "type": "text", "title": "Real Executer", "titleSize": 30, "body": "Real Executer | sUNC 100% | inject speed : 5s | .gg/projectreal | SkyProjectおすすめExecuter | Free & Paid | EZ KeySystem" },
-            { "type": "button", "title": "公式ウェブサイトへ", "color": "primary", "action": {"type": "link", "url": "https://projectreal.gg/"}}
+            { "type": "button", "title": "公式ウェブサイトへ", "color": "primary", "size": "xauto", "action": {"type": "link", "url": "https://projectreal.gg/"}}
           ]
         },
         {
@@ -137,7 +137,7 @@
           "radius": 20,
           "children": [
             { "type": "text", "title": "Madium", "titleSize": 30, "body": "Madium Executer | sUNC ??%(90+) | inject speed : ?s(10-) | .gg/olemad | SkyProjectおすすめExecuter | All Free | not KeySystem" },
-            { "type": "button", "title": "公式ウェブサイトへ", "color": "primary", "action": {"type": "link", "url": "https://getmadium.net/"}}
+            { "type": "button", "title": "公式ウェブサイトへ", "color": "primary", "size": "xauto", "action": {"type": "link", "url": "https://getmadium.net/"}}
 
           ]
         }
