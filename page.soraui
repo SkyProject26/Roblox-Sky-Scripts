@@ -49,6 +49,7 @@
       "children": [
         {
           "type": "insection",
+          "position": "bottom-center",
           "radius": 20,
           "children": [
             { "type": "text", "title": "Mint Hub | Universal", "titleSize": 30, "body": "Mint Hub © Sky Project | 様々なゲームで使用することができます。" },
@@ -58,6 +59,7 @@
         },
         {
           "type": "insection",
+          "position": "bottom-center",
           "radius": 20,
           "children": [
             { "type": "text", "title": "Bloody V2 Premium Crack", "titleSize": 30, "body": "Bloody V2 | FTAP Script 完全無料で、プレミアムが使えます。" },
