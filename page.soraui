@@ -95,6 +95,33 @@
         }
       ]
     },
+    {
+      "type": "section",
+      "height": 290,
+      "position": "bottom-center",
+      "tab": "scripts",
+      "children": [
+        {
+          "type": "insection",
+          "radius": 20,
+          "children": [
+            { "type": "text", "title": "Illusionary.Rivals", "titleSize": 30, "body": "Rivals用の高性能スクリプトです。" },
+            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://illusionary-hub.vercel.app/RivalsV2.lua\"))()"},
+            { "type": "button", "position": "bottom-center", "title": "ソースコードを見る | 難読化済み", "color": "primary", "size": "xauto", "action": {"type": "link", "url": "https://illusionary-hub.vercel.app/RivalsV2.lua"}}
+          ]
+        },
+        {
+          "type": "insection",
+          "radius": 20,
+          "children": [
+            { "type": "text", "title": "Illusionary.99NITF", "titleSize": 30, "body": "99 Nights in the Forest" },
+            {"type": "codespace", "language": "lua", "code": "loadstring(game:HttpGet(\"https://illusionary-hub.vercel.app/99-Nights-in-the-Forest.lua\"))()"},
+            { "type": "button", "position": "bottom-center", "title": "ソースコードを見る | オープンソース", "color": "primary", "size": "xauto", "action": {"type": "link", "url": "https://illusionary-hub.vercel.app/99-Nights-in-the-Forest.lua"}}
+
+          ]
+        }
+      ]
+    },
 
 
     {
